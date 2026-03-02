@@ -1,0 +1,27 @@
+{
+  "document_id": "pdf-inv-2024-ec-0889",
+  "document_type": "invoice",
+  "raw_content": {
+    "document_header": "FACTURE / INVOICE",
+    "doc_number": "INV-2024-EC-0889",
+    "date": "2024-10-18",
+    "shipper_name": "AgroRhein Cooperativa",
+    "receiver_name": "BelgiFeed NV",
+    "origin": "Ludwigshafen (Rhin)",
+    "destination": "Antwerpen",
+    "goods_description": "Céréales et tourteau de soja pour alimentation animale",
+    "quantity": 1,
+    "total_weight_kg": 22000.0,
+    "transport_mode": "river",
+    "distance_km": 580.0,
+    "departure_date": "2024-10-18",
+    "arrival_date": "2024-10-21",
+    "currency": "EUR",
+    "total_cost": 15000.0,
+    "incoterms": "FCA",
+    "carrier": "Rhenus Logistics — Fluvial",
+    "tracking_ref": "RHN-FLV-2024-10982"
+  },
+  "source_filename": "invoice_eco_005.json",
+  "created_at": "2026-03-02T10:38:07.237881"
+}

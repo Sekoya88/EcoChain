@@ -1,0 +1,30 @@
+{
+  "document_id": "e10cc64c-5a3a-48d5-a3f5-81b8548286c6",
+  "document_type": "invoice",
+  "raw_content": {
+    "document_header": "FACTURE / INVOICE",
+    "invoice_number": "INV-2024-28289",
+    "date": "2024-05-08",
+    "shipper_name": "TransEurope Logistics GmbH",
+    "shipper_address": "Hamburg, Germany",
+    "receiver_name": "Atlantic Shipping Ltd",
+    "receiver_address": "Rotterdam, Netherlands",
+    "origin": "Hamburg",
+    "destination": "Marseille",
+    "goods_description": "Composants électroniques haute densité",
+    "quantity": 164,
+    "unit_weight_kg": 0.5,
+    "total_weight_kg": 82.0,
+    "transport_mode": "road",
+    "distance_km": 1450.0,
+    "departure_date": "2024-05-08",
+    "arrival_date": "2024-05-17",
+    "currency": "EUR",
+    "unit_price": 100.1,
+    "total_cost": 16416.4,
+    "incoterms": "EXW",
+    "notes": "Ref transport: TR-9935"
+  },
+  "source_filename": "invoice_001.json",
+  "created_at": "2026-03-01T22:53:48.308112"
+}

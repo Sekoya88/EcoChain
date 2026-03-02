@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+*.egg
+dist/
+build/
+*.so
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+
+# Environment variables (NEVER commit API keys!)
+.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Testing
+.coverage
+htmlcov/
+.pytest_cache/
+.mypy_cache/
+
+# Logs
+*.log
+
+# Generated data (optional, uncomment to exclude)
+# data/pdfs/
+
+# Gemini agent data
+.gemini/

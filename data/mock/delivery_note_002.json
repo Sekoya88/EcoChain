@@ -1,0 +1,26 @@
+{
+  "document_id": "07121715-2b38-4e2e-8f86-abfcaa6fbc98",
+  "document_type": "delivery_note",
+  "raw_content": {
+    "document_header": "BON DE LIVRAISON / DELIVERY NOTE",
+    "delivery_note_number": "DN-2024-13905",
+    "date": "2024-10-14",
+    "shipper": "Mediterranean Freight SAS — Marseille",
+    "consignee": "Baltic Trade OÜ — Tallinn",
+    "origin_warehouse": "Entrepôt Rotterdam",
+    "destination_warehouse": "Entrepôt Shanghai",
+    "goods": "Pièces automobiles (transmissions)",
+    "packages_count": 23,
+    "gross_weight_kg": 1035.0,
+    "net_weight_kg": 983.2,
+    "volume_m3": 3.1,
+    "transport_type": "maritime",
+    "estimated_distance_km": 19500.0,
+    "ship_date": "2024-10-14",
+    "expected_delivery": "2024-10-16",
+    "carrier": "Carrier-Alpha",
+    "tracking_ref": "TRK334760738"
+  },
+  "source_filename": "delivery_note_002.json",
+  "created_at": "2026-03-01T22:53:48.308137"
+}

@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2024-03-02" agent="EcoChain AI" version="24.0.0" type="device">
+  <diagram id="ecochain-architecture" name="EcoChain Architecture">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- ═══════════════════════════════════════════════════ -->
+        <!-- TITLE -->
+        <!-- ═══════════════════════════════════════════════════ -->
+        <mxCell id="title" value="EcoChain AI — System Architecture" style="text;html=1;fontSize=22;fontStyle=1;align=center;verticalAlign=middle;fontColor=#1a1d26;fontFamily=Inter;" vertex="1" parent="1">
+          <mxGeometry x="350" y="20" width="500" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="subtitle" value="Multi-Agent Supply Chain Carbon Footprint Optimizer — Clean Architecture" style="text;html=1;fontSize=12;align=center;verticalAlign=middle;fontColor=#6b7280;fontFamily=Inter;" vertex="1" parent="1">
+          <mxGeometry x="350" y="55" width="500" height="25" as="geometry"/>
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════ -->
+        <!-- LAYER 1: INTERFACES (top) -->
+        <!-- ═══════════════════════════════════════════════════ -->
+        <mxCell id="layer-interfaces" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f0fdf4;strokeColor=#10b981;strokeWidth=2;arcSize=8;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="100" width="1120" height="160" as="geometry"/>
+        </mxCell>
+        <mxCell id="layer-interfaces-label" value="INTERFACES LAYER" style="text;html=1;fontSize=11;fontStyle=1;align=left;verticalAlign=top;fontColor=#059669;fontFamily=Inter;" vertex="1" parent="1">
+          <mxGeometry x="55" y="105" width="200" height="20" as="geometry"/>
+        </mxCell>
+
+        <!-- Streamlit Frontend -->
+        <mxCell id="frontend" value="&lt;b&gt;Streamlit Frontend&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px;color:#6b7280&quot;&gt;Dashboard + Charts&lt;br&gt;Plotly · Dark Theme&lt;br&gt;PDF Upload · SSE Logs&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#10b981;strokeWidth=2;shadow=1;arcSize=10;fontSize=11;fontFamily=Inter;" vertex="1" parent="1">
+          <mxGeometry x="80" y="135" width="180" height="100" as="geometry"/>
+        </mxCell>
+
+        <!-- FastAPI Backend -->
+        <mxCell id="api" value="&lt;b&gt;FastAPI API&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px;color:#6b7280&quot;&gt;REST Endpoints&lt;br&gt;/documents/process&lt;br&gt;/documents/batch&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#3b82f6;strokeWidth=2;shadow=1;arcSize=10;fontSize=11;fontFamily=Inter;" vertex="1" parent="1">
+          <mxGeometry x="320" y="135" width="180" height="100" as="geometry"/>
+        </mxCell>
+
+        <!-- SSE Events -->
+        <mxCell id="sse" value="&lt;b&gt;SSE Event Stream&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px;color:#6b7280&quot;&gt;/events/stream&lt;br&gt;/events/history&lt;br&gt;Real-Time Logs&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#8b5cf6;strokeWidth=2;shadow=1;arcSize=10;fontSize=11;fontFamily=Inter;" vertex="1" parent="1">
+          <mxGeometry x="560" y="135" width="180" height="100" as="geometry"/>
+        </mxCell>
+
+        <!-- PDF Upload -->
+        <mxCell id="pdf-upload" value="&lt;b&gt;PDF Upload&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px;color:#6b7280&quot;&gt;/documents/upload-pdf&lt;br&gt;File → JSON extraction&lt;br&gt;reportlab generated&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#f59e0b;strokeWidth=2;shadow=1;arcSize=10;fontSize=11;fontFamily=Inter;" vertex="1" parent="1">
+          <mxGeometry x="800" y="135" width="180" height="100" as="geometry"/>
+        </mxCell>
+
+        <!-- Arrows: Frontend → API, Frontend ← SSE -->
+        <mxCell id="fe-api" style="endArrow=block;endFill=1;strokeColor=#3b82f6;strokeWidth=2;" edge="1" source="frontend" target="api" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="sse-fe" style="endArrow=block;endFill=1;strokeColor=#8b5cf6;strokeWidth=2;dashed=1;" edge="1" source="sse" target="frontend" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════ -->
+        <!-- LAYER 2: APPLICATION (middle) -->
+        <!-- ═══════════════════════════════════════════════════ -->
+        <mxCell id="layer-application" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eff6ff;strokeColor=#3b82f6;strokeWidth=2;arcSize=8;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="300" width="1120" height="280" as="geometry"/>
+        </mxCell>
+        <mxCell id="layer-application-label" value="APPLICATION LAYER" style="text;html=1;fontSize=11;fontStyle=1;align=left;verticalAlign=top;fontColor=#2563eb;fontFamily=Inter;" vertex="1" parent="1">
+          <mxGeometry x="55" y="305" width="200" height="20" as="geometry"/>
+        </mxCell>
+
+        <!-- Use Case -->
+        <mxCell id="usecase" value="&lt;b&gt;ProcessDocumentUseCase&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px;color:#6b7280&quot;&gt;Execute single / batch&lt;br&gt;Error handling&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#3b82f6;strokeWidth=2;shadow=1;arcSize=10;fontSize=11;fontFamily=Inter;" vertex="1" parent="1">
+          <mxGeometry x="420" y="330" width="220" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- Orchestrator -->
+        <mxCell id="orchestrator" value="&lt;b&gt;🎯 OrchestratorAgent&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px;color:#6b7280&quot;&gt;Pipeline Coordinator&lt;br&gt;Sequential Agent Execution&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#f59e0b;strokeWidth=2;shadow=1;arcSize=10;fontSize=11;fontFamily=Inter;" vertex="1" parent="1">
+          <mxGeometry x="420" y="410" width="220" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- Agent Pipeline (4 agents in a row) -->
+        <mxCell id="extractor" value="&lt;b&gt;1. Extractor&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:8px;color:#6b7280&quot;&gt;AGNO Agent&lt;br&gt;Gemini 2.5 Flash&lt;br&gt;Structured Output&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dbeafe;strokeColor=#3b82f6;strokeWidth=1.5;shadow=1;arcSize=12;fontSize=10;fontFamily=Inter;" vertex="1" parent="1">
+          <mxGeometry x="80" y="500" width="150" height="65" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="validator" value="&lt;b&gt;2. Validator&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:8px;color:#6b7280&quot;&gt;AGNO Agent&lt;br&gt;5 Business Rules&lt;br&gt;+ LLM Semantic&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#f59e0b;strokeWidth=1.5;shadow=1;arcSize=12;fontSize=10;fontFamily=Inter;" vertex="1" parent="1">
+          <mxGeometry x="310" y="500" width="150" height="65" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="calculator" value="&lt;b&gt;3. CarbonCalculator&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:8px;color:#6b7280&quot;&gt;Deterministic&lt;br&gt;ADEME Factors&lt;br&gt;CO2 = t × km × EF&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d1fae5;strokeColor=#10b981;strokeWidth=1.5;shadow=1;arcSize=12;fontSize=10;fontFamily=Inter;" vertex="1" parent="1">
+          <mxGeometry x="540" y="500" width="150" height="65" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="recommender" value="&lt;b&gt;4. Recommender&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:8px;color:#6b7280&quot;&gt;AGNO Agent&lt;br&gt;Gemini 2.5 Flash&lt;br&gt;3 Recommendations&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ede9fe;strokeColor=#8b5cf6;strokeWidth=1.5;shadow=1;arcSize=12;fontSize=10;fontFamily=Inter;" vertex="1" parent="1">
+          <mxGeometry x="770" y="500" width="150" height="65" as="geometry"/>
+        </mxCell>
+
+        <!-- Pipeline arrows -->
+        <mxCell id="ext-val" style="endArrow=block;endFill=1;strokeColor=#6b7280;strokeWidth=2;" edge="1" source="extractor" target="validator" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="val-calc" style="endArrow=block;endFill=1;strokeColor=#6b7280;strokeWidth=2;" edge="1" source="validator" target="calculator" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="calc-rec" style="endArrow=block;endFill=1;strokeColor=#6b7280;strokeWidth=2;" edge="1" source="calculator" target="recommender" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- API → UseCase → Orchestrator arrows -->
+        <mxCell id="api-uc" style="endArrow=block;endFill=1;strokeColor=#3b82f6;strokeWidth=2;" edge="1" source="api" target="usecase" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="uc-orch" style="endArrow=block;endFill=1;strokeColor=#f59e0b;strokeWidth=2;" edge="1" source="usecase" target="orchestrator" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="orch-ext" style="endArrow=block;endFill=1;strokeColor=#f59e0b;strokeWidth=1.5;dashed=1;" edge="1" source="orchestrator" target="extractor" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════ -->
+        <!-- LAYER 3: DOMAIN (bottom-left) -->
+        <!-- ═══════════════════════════════════════════════════ -->
+        <mxCell id="layer-domain" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef2f2;strokeColor=#ef4444;strokeWidth=2;arcSize=8;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="620" width="500" height="150" as="geometry"/>
+        </mxCell>
+        <mxCell id="layer-domain-label" value="DOMAIN LAYER" style="text;html=1;fontSize=11;fontStyle=1;align=left;verticalAlign=top;fontColor=#dc2626;fontFamily=Inter;" vertex="1" parent="1">
+          <mxGeometry x="55" y="625" width="200" height="20" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="models" value="&lt;b&gt;Domain Models&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:8px;color:#6b7280&quot;&gt;ShipmentEntity · CarbonReport&lt;br&gt;EmissionDetail · ValidationResult&lt;br&gt;Recommendation · ModeComparison&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#ef4444;strokeWidth=1.5;shadow=1;arcSize=10;fontSize=10;fontFamily=Inter;" vertex="1" parent="1">
+          <mxGeometry x="70" y="655" width="200" height="80" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="constants" value="&lt;b&gt;Constants&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:8px;color:#6b7280&quot;&gt;ADEME Emission Factors&lt;br&gt;Sector Benchmarks&lt;br&gt;Mode Constraints&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#ef4444;strokeWidth=1.5;shadow=1;arcSize=10;fontSize=10;fontFamily=Inter;" vertex="1" parent="1">
+          <mxGeometry x="310" y="655" width="200" height="80" as="geometry"/>
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════ -->
+        <!-- LAYER 4: INFRASTRUCTURE (bottom-right) -->
+        <!-- ═══════════════════════════════════════════════════ -->
+        <mxCell id="layer-infra" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f3ff;strokeColor=#8b5cf6;strokeWidth=2;arcSize=8;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="580" y="620" width="580" height="150" as="geometry"/>
+        </mxCell>
+        <mxCell id="layer-infra-label" value="INFRASTRUCTURE LAYER" style="text;html=1;fontSize=11;fontStyle=1;align=left;verticalAlign=top;fontColor=#7c3aed;fontFamily=Inter;" vertex="1" parent="1">
+          <mxGeometry x="595" y="625" width="200" height="20" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="event-logger" value="&lt;b&gt;EventLogger&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:8px;color:#6b7280&quot;&gt;asyncio.Queue&lt;br&gt;Pub/Sub Pattern&lt;br&gt;SSE Broadcasting&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#8b5cf6;strokeWidth=1.5;shadow=1;arcSize=10;fontSize=10;fontFamily=Inter;" vertex="1" parent="1">
+          <mxGeometry x="610" y="655" width="160" height="80" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="llm" value="&lt;b&gt;LLM Integration&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:8px;color:#6b7280&quot;&gt;AGNO Framework&lt;br&gt;Google Gemini 2.5 Flash&lt;br&gt;Structured Outputs&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#8b5cf6;strokeWidth=1.5;shadow=1;arcSize=10;fontSize=10;fontFamily=Inter;" vertex="1" parent="1">
+          <mxGeometry x="800" y="655" width="160" height="80" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="mock-data" value="&lt;b&gt;Mock Data&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:8px;color:#6b7280&quot;&gt;10 JSON + 5 PDFs&lt;br&gt;Test Documents&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#8b5cf6;strokeWidth=1.5;shadow=1;arcSize=10;fontSize=10;fontFamily=Inter;" vertex="1" parent="1">
+          <mxGeometry x="990" y="655" width="140" height="80" as="geometry"/>
+        </mxCell>
+
+        <!-- EventLogger → SSE arrow -->
+        <mxCell id="logger-sse" style="endArrow=block;endFill=1;strokeColor=#8b5cf6;strokeWidth=2;" edge="1" source="event-logger" target="sse" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════ -->
+        <!-- DATA FLOW LABELS -->
+        <!-- ═══════════════════════════════════════════════════ -->
+        <mxCell id="flow-label-1" value="HTTP POST" style="text;html=1;fontSize=8;fontColor=#3b82f6;fontFamily=Inter;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="270" y="165" width="60" height="15" as="geometry"/>
+        </mxCell>
+        <mxCell id="flow-label-2" value="SSE Stream" style="text;html=1;fontSize=8;fontColor=#8b5cf6;fontFamily=Inter;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="450" y="150" width="70" height="15" as="geometry"/>
+        </mxCell>
+        <mxCell id="flow-label-3" value="Pipeline: Extract → Validate → Calculate → Recommend" style="text;html=1;fontSize=9;fontStyle=3;fontColor=#6b7280;fontFamily=Inter;" vertex="1" parent="1">
+          <mxGeometry x="300" y="480" width="350" height="15" as="geometry"/>
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════ -->
+        <!-- TECHNOLOGY BADGES -->
+        <!-- ═══════════════════════════════════════════════════ -->
+        <mxCell id="badge-python" value="Python 3.12" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1a1d26;strokeColor=none;fontColor=#e5e7eb;fontSize=8;fontFamily=Inter;arcSize=50;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="110" width="80" height="22" as="geometry"/>
+        </mxCell>
+        <mxCell id="badge-agno" value="AGNO" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#3b82f6;strokeColor=none;fontColor=#ffffff;fontSize=8;fontFamily=Inter;arcSize=50;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="140" width="80" height="22" as="geometry"/>
+        </mxCell>
+        <mxCell id="badge-gemini" value="Gemini 2.5 Flash" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#8b5cf6;strokeColor=none;fontColor=#ffffff;fontSize=8;fontFamily=Inter;arcSize=50;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="170" width="105" height="22" as="geometry"/>
+        </mxCell>
+        <mxCell id="badge-pydantic" value="Pydantic v2" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#10b981;strokeColor=none;fontColor=#ffffff;fontSize=8;fontFamily=Inter;arcSize=50;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="200" width="80" height="22" as="geometry"/>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

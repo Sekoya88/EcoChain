@@ -1,0 +1,30 @@
+{
+  "document_id": "72c06e5a-9620-48b5-a350-42ad0e23b261",
+  "document_type": "invoice",
+  "raw_content": {
+    "document_header": "FACTURE / INVOICE",
+    "invoice_number": "INV-2024-23396",
+    "date": "2024-03-07",
+    "shipper_name": "Alpine Cargo AG",
+    "shipper_address": "Zurich, Switzerland",
+    "receiver_name": "Channel Express PLC",
+    "receiver_address": "Dover, United Kingdom",
+    "origin": "Barcelona",
+    "destination": "Warsaw",
+    "goods_description": "Machines industrielles CNC",
+    "quantity": 109,
+    "unit_weight_kg": 2500.0,
+    "total_weight_kg": 272500.0,
+    "transport_mode": "rail",
+    "distance_km": 2200.0,
+    "departure_date": "2024-03-07",
+    "arrival_date": "2024-03-19",
+    "currency": "EUR",
+    "unit_price": 203.11,
+    "total_cost": 22138.99,
+    "incoterms": "EXW",
+    "notes": "Ref transport: TR-7224"
+  },
+  "source_filename": "invoice_005.json",
+  "created_at": "2026-03-01T22:53:48.308170"
+}

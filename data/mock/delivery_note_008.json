@@ -1,0 +1,26 @@
+{
+  "document_id": "d948f7cd-dd0f-421e-ad30-1fab638804b8",
+  "document_type": "delivery_note",
+  "raw_content": {
+    "document_header": "BON DE LIVRAISON / DELIVERY NOTE",
+    "delivery_note_number": "DN-2024-85674",
+    "date": "2024-10-28",
+    "shipper": "Central Logistics sp. z o.o. — Warsaw",
+    "consignee": "Danube Logistics SRL — Constanta",
+    "origin_warehouse": "Entrepôt Zurich",
+    "destination_warehouse": "Entrepôt Budapest",
+    "goods": "Produits chimiques en fûts (non dangereux)",
+    "packages_count": 161,
+    "gross_weight_kg": 32200.0,
+    "net_weight_kg": 30590.0,
+    "volume_m3": 96.6,
+    "transport_type": "rail",
+    "estimated_distance_km": 850.0,
+    "ship_date": "2024-10-28",
+    "expected_delivery": "2024-11-07",
+    "carrier": "Carrier-Beta",
+    "tracking_ref": "TRK856528252"
+  },
+  "source_filename": "delivery_note_008.json",
+  "created_at": "2026-03-01T22:53:48.308194"
+}

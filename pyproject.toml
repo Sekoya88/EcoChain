@@ -1,0 +1,62 @@
+[project]
+name = "ecochain-ai"
+version = "0.1.0"
+description = "EcoChain AI — Supply Chain Carbon Footprint Optimization with Multi-Agent Architecture"
+readme = "README.md"
+requires-python = ">=3.12"
+license = {text = "MIT"}
+authors = [{name = "Nicolas", email = "nicolas@ecochain.ai"}]
+
+dependencies = [
+    "agno>=1.5.0",
+    "google-generativeai>=0.8.0",
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.32.0",
+    "pydantic>=2.10.0",
+    "pydantic-settings>=2.7.0",
+    "streamlit>=1.41.0",
+    "plotly>=5.24.0",
+    "httpx>=0.28.0",
+    "python-dotenv>=1.0.0",
+    "anyio>=4.8.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.0",
+    "pytest-asyncio>=0.24.0",
+    "ruff>=0.8.0",
+    "mypy>=1.13.0",
+    "pre-commit>=4.0.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+pythonpath = ["."]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "A", "SIM", "TCH"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+no_implicit_optional = true
+
+[[tool.mypy.overrides]]
+module = ["agno.*", "google.generativeai.*", "streamlit.*", "plotly.*"]
+ignore_missing_imports = true

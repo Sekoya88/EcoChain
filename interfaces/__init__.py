@@ -1,0 +1,1 @@
+"""EcoChain AI — Interfaces Package."""

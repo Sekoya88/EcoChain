@@ -1,0 +1,57 @@
+# ─────────────────────────────────────────────────
+# EcoChain AI — Docker Compose
+# Multi-service : backend (FastAPI) + frontend (Streamlit)
+# ─────────────────────────────────────────────────
+version: "3.9"
+
+services:
+  # ── Backend (FastAPI) ──────────────────────────
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: ecochain-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY:-}
+      - GEMINI_PRIMARY_MODEL=${GEMINI_PRIMARY_MODEL:-gemini-2.5-flash}
+      - GEMINI_FALLBACK_MODEL=${GEMINI_FALLBACK_MODEL:-gemini-1.5-flash}
+      - LLM_MAX_RETRIES=${LLM_MAX_RETRIES:-3}
+      - LLM_RETRY_BASE_DELAY=${LLM_RETRY_BASE_DELAY:-1.0}
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+    env_file:
+      - .env
+    healthcheck:
+      test: [ "CMD", "python", "-c", "import httpx; httpx.get('http://localhost:8000/health').raise_for_status()" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - ecochain-net
+    restart: unless-stopped
+
+  # ── Frontend (Streamlit) ───────────────────────
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: ecochain-frontend
+    ports:
+      - "8501:8501"
+    environment:
+      - BACKEND_URL=http://backend:8000
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - ecochain-net
+    restart: unless-stopped
+
+# ── Network ──────────────────────────────────────
+networks:
+  ecochain-net:
+    driver: bridge
+    name: ecochain-network

@@ -1,0 +1,27 @@
+{
+  "document_id": "pdf-inv-2024-ec-0562",
+  "document_type": "invoice",
+  "raw_content": {
+    "document_header": "FACTURE / INVOICE",
+    "doc_number": "INV-2024-EC-0562",
+    "date": "2024-08-10",
+    "shipper_name": "Shenzhen MicroElec Co. Ltd",
+    "receiver_name": "TechnoDistrib SAS",
+    "origin": "Shenzhen",
+    "destination": "Paris CDG",
+    "goods_description": "Semiconducteurs et composants électroniques (FPGA, DRAM modules)",
+    "quantity": 5000,
+    "total_weight_kg": 250.0,
+    "transport_mode": "air",
+    "distance_km": 9500.0,
+    "departure_date": "2024-08-10",
+    "arrival_date": "2024-08-12",
+    "currency": "USD",
+    "total_cost": 112500.0,
+    "incoterms": "FCA",
+    "carrier": "Air France Cargo",
+    "tracking_ref": "AF-CARGO-2024-88341"
+  },
+  "source_filename": "invoice_eco_003.json",
+  "created_at": "2026-03-02T10:38:07.230384"
+}
