@@ -1,0 +1,291 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, monospace;
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+}
+
+/* Kodama Grove (21st.dev) — Deep forest, moss, organic glow */
+:root {
+  --radius: 0.625rem;
+  --background: #0a0f0a;
+  --foreground: #e2f0e2;
+  --card: rgba(15, 22, 16, 0.92);
+  --card-solid: #141c14;
+  --card-foreground: #e2f0e2;
+  --popover: #0f1610;
+  --popover-foreground: #e2f0e2;
+  --primary: #5a9c5a;
+  --primary-foreground: #0a0f0a;
+  --secondary: rgba(26, 44, 28, 0.5);
+  --secondary-foreground: #9fc69f;
+  --muted: rgba(61, 92, 61, 0.4);
+  --muted-foreground: #6b8f6b;
+  --accent: #7bc47b;
+  --accent-foreground: #0a0f0a;
+  --destructive: #c75d5d;
+  --border: rgba(61, 92, 61, 0.25);
+  --input: rgba(61, 92, 61, 0.3);
+  --ring: #5a9c5a;
+  --chart-1: #5a9c5a;
+  --chart-2: #7bc47b;
+  --chart-3: #6ba3b8;
+  --chart-4: #c9a227;
+  --chart-5: #8fcf8f;
+  --sidebar: #0f1610;
+  --sidebar-foreground: #e2f0e2;
+  --sidebar-primary: #5a9c5a;
+  --sidebar-primary-foreground: #0a0f0a;
+  --sidebar-accent: rgba(90, 156, 90, 0.2);
+  --sidebar-accent-foreground: #9fc69f;
+  --sidebar-border: rgba(61, 92, 61, 0.25);
+  --sidebar-ring: #5a9c5a;
+}
+
+/* Light theme (Kodama Grove light variant) */
+.light {
+  --background: #f0f7f0;
+  --foreground: #0f1610;
+  --card: rgba(255, 255, 255, 0.95);
+  --card-solid: #ffffff;
+  --card-foreground: #0f1610;
+  --popover: #ffffff;
+  --popover-foreground: #0f1610;
+  --primary: #4a7c4a;
+  --primary-foreground: #ffffff;
+  --secondary: rgba(90, 156, 90, 0.15);
+  --secondary-foreground: #2d4a2d;
+  --muted: rgba(61, 92, 61, 0.2);
+  --muted-foreground: #4a6b4a;
+  --accent: #5a9c5a;
+  --accent-foreground: #ffffff;
+  --destructive: #c75d5d;
+  --border: rgba(61, 92, 61, 0.2);
+  --input: rgba(61, 92, 61, 0.15);
+  --ring: #4a7c4a;
+  --chart-1: #5a9c5a;
+  --chart-2: #7bc47b;
+  --chart-3: #6ba3b8;
+  --chart-4: #c9a227;
+  --chart-5: #8fcf8f;
+  --sidebar: #e8f0e8;
+  --sidebar-foreground: #0f1610;
+  --sidebar-primary: #4a7c4a;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: rgba(90, 156, 90, 0.2);
+  --sidebar-accent-foreground: #2d4a2d;
+  --sidebar-border: rgba(61, 92, 61, 0.2);
+  --sidebar-ring: #4a7c4a;
+}
+
+.dark {
+  --background: #0a0f0a;
+  --foreground: #e2f0e2;
+  --card: rgba(15, 22, 16, 0.92);
+  --card-foreground: #e2f0e2;
+  --popover: #0f1610;
+  --popover-foreground: #e2f0e2;
+  --primary: #5a9c5a;
+  --primary-foreground: #0a0f0a;
+  --secondary: rgba(26, 44, 28, 0.5);
+  --secondary-foreground: #9fc69f;
+  --muted: rgba(61, 92, 61, 0.4);
+  --muted-foreground: #6b8f6b;
+  --accent: #7bc47b;
+  --accent-foreground: #0a0f0a;
+  --destructive: #c75d5d;
+  --border: rgba(61, 92, 61, 0.2);
+  --input: rgba(61, 92, 61, 0.3);
+  --ring: #5a9c5a;
+  --chart-1: #5a9c5a;
+  --chart-2: #7bc47b;
+  --chart-3: #6ba3b8;
+  --chart-4: #c9a227;
+  --chart-5: #8fcf8f;
+  --sidebar: #0f1610;
+  --sidebar-foreground: #e2f0e2;
+  --sidebar-primary: #5a9c5a;
+  --sidebar-primary-foreground: #0a0f0a;
+  --sidebar-accent: rgba(90, 156, 90, 0.2);
+  --sidebar-accent-foreground: #9fc69f;
+  --sidebar-border: rgba(61, 92, 61, 0.2);
+  --sidebar-ring: #5a9c5a;
+}
+
+@keyframes typing {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateY(-2px);
+    opacity: 1;
+  }
+}
+
+@keyframes loading-dots {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes wave {
+  0%,
+  100% {
+    transform: scaleY(1);
+  }
+  50% {
+    transform: scaleY(0.6);
+  }
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes text-blink {
+  0%,
+  100% {
+    color: var(--primary);
+  }
+  50% {
+    color: var(--muted-foreground);
+  }
+}
+
+@keyframes bounce-dots {
+  0%,
+  100% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+}
+
+@keyframes thin-pulse {
+  0%,
+  100% {
+    transform: scale(0.95);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.4;
+  }
+}
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: 1;
+  }
+}
+
+@keyframes shimmer-text {
+  0% {
+    background-position: 150% center;
+  }
+  100% {
+    background-position: -150% center;
+  }
+}
+
+@keyframes wave-bars {
+  0%,
+  100% {
+    transform: scaleY(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scaleY(0.6);
+    opacity: 1;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 50%;
+  }
+  100% {
+    background-position: -200% 50%;
+  }
+}
+
+@keyframes spinner-fade {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}

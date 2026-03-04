@@ -1,4 +1,4 @@
-# � EcoChain AI
+# EcoChain AI
 
 **Optimisation de l'empreinte carbone Supply Chain par architecture Multi-Agent IA**
 
@@ -6,11 +6,12 @@ EcoChain AI analyse des documents logistiques (factures, bons de livraison), cal
 
 ---
 
-## 🚀 Lancement rapide
+## Lancement rapide
 
 ### 1. Prérequis
 
 - **Python 3.12+**
+- **Node.js 18+** (pour le frontend Next.js)
 - **Clé API Google** → [Obtenir ici](https://aistudio.google.com/apikey)
 
 ### 2. Installation
@@ -20,220 +21,206 @@ EcoChain AI analyse des documents logistiques (factures, bons de livraison), cal
 git clone https://github.com/<ton-user>/EcoChain.git
 cd EcoChain
 
-# Créer l'environnement virtuel et installer les dépendances
-python3 -m venv .venv
-source .venv/bin/activate
+# Installer les dépendances Python (uv recommandé)
+uv sync
+
+# Ou avec pip
 pip install -e ".[dev]"
 ```
 
 ### 3. Configurer la clé API
 
-```bash
-# Copier le fichier d'exemple
-cp .env.example .env
-
-# Éditer .env et ajouter ta clé API Google
-nano .env   # ou code .env
-```
-
-Le fichier `.env` doit contenir :
+Crée un fichier `.env` à la racine :
 
 ```env
 GOOGLE_API_KEY=ta-clé-api-ici
 ```
 
-> ⚠️ **Sans clé API**, les agents AGNO utilisent un **fallback déterministe** (pas de LLM). Les résultats marchent mais sont moins précis.
+> La clé API est **obligatoire** : les agents AGNO (Extractor, Validator, Recommender) utilisent Gemini 2.5 Flash. Sans clé, le backend lèvera une erreur au démarrage ou lors de l'analyse.
 
 ### 4. Lancer l'application
-
-Tu as besoin de **2 terminaux** :
 
 **Terminal 1 — Backend API (FastAPI) :**
 
 ```bash
-source .venv/bin/activate
-uvicorn interfaces.api.main:app --reload --port 8000
+uv run uvicorn interfaces.api.main:app --reload --port 8000
 ```
-
-Tu devrais voir :
 
 ```
 INFO  | EcoChain AI API ready (AGNO agents)
-INFO  | Uvicorn running on http://0.0.0.0:8000
+INFO  | Uvicorn running on http://127.0.0.1:8000
 ```
 
-**Terminal 2 — Frontend (Streamlit) :**
+**Terminal 2 — Frontend Next.js (recommandé) :**
 
 ```bash
-source .venv/bin/activate
-streamlit run interfaces/frontend/app.py --server.port 8501
+cd interfaces/web && npm install && npm run dev
 ```
 
-Tu devrais voir :
+→ http://localhost:3000
 
-```
-You can now view your Streamlit app in your browser.
-Local URL: http://localhost:8501
-```
-
-### 5. Ouvrir dans le navigateur
-
-**→ [http://localhost:8501](http://localhost:8501)**
-
----
-
-## 🔍 Comment utiliser
-
-1. **Sidebar gauche** → Sélectionne un document (15 documents de test dispo)
-2. **"Analyze Document"** → Lance le pipeline multi-agent
-3. **Observe** le pipeline stepper en temps réel (Extract → Validate → Calculate → Recommend)
-4. **Résultat** → Métriques CO2, graphiques, recommandations, logs agents
-
-### Upload PDF
-
-Tu peux aussi uploader un PDF de test depuis `data/pdfs/` via le bouton "Browse files" dans la sidebar.
-
-Pour générer de nouveaux PDFs de test :
+**Alternative — Streamlit :**
 
 ```bash
-python scripts/generate_pdfs.py
+uv run streamlit run interfaces/frontend/app.py --server.port 8501
+```
+
+→ http://localhost:8501
+
+### 5. Variable d'environnement frontend
+
+Pour le frontend Next.js, crée `interfaces/web/.env.local` si tu changes le port backend :
+
+```env
+NEXT_PUBLIC_BACKEND_URL=http://localhost:8000
 ```
 
 ---
 
-## 📊 Voir les logs agents en temps réel
+## Comment utiliser
 
-### Option 1 : Dans le frontend
+### Dashboard Next.js (recommandé)
 
-Les logs s'affichent en bas du rapport après analyse. Chaque agent a sa couleur :
+1. **Upload PDF** — Glisse-dépose ou sélectionne un PDF depuis `interfaces/web/public/test-documents/` ou `data/pdfs/`
+2. **Mock Documents** — Choisis `invoice_001.json` ou un autre, puis **Analyze One** ou **Batch**
+3. **Analyze Uploaded PDF** — Lance le pipeline sur le PDF sélectionné
+4. **Résultat** — Métriques CO2, graphique comparatif modal, recommandations, Agent Activity Log en temps réel (SSE)
 
-- 🔵 **Extractor** — Extraction des données du document
-- 🟡 **Validator** — Validation des règles métier
-- 🟢 **CarbonCalculator** — Calcul CO2 (facteurs ADEME)
-- 🟣 **Recommender** — Génération des recommandations IA
+### Documents PDF de test
 
-### Option 2 : Endpoint SSE (streaming temps réel)
+5 PDFs pré-générés sont disponibles dans `interfaces/web/public/test-documents/` :
+
+| Fichier | Trajet | Mode | Poids |
+|---------|--------|------|-------|
+| invoice_eco_001.pdf | Stuttgart → Torino | Road | 1200 kg |
+| delivery_note_eco_002.pdf | Saint-Nazaire → Göteborg | Maritime | 3 t |
+| invoice_eco_003.pdf | Shenzhen → Paris CDG | Air | 250 kg |
+| delivery_note_eco_004.pdf | Tallinn → Duisburg | Rail | 36 t |
+| invoice_eco_005.pdf | Ludwigshafen → Antwerpen | River | 22 t |
+
+Régénérer les PDFs :
 
 ```bash
-# Stream les événements en direct dans le terminal
+uv run python scripts/generate_pdfs.py
+cp data/pdfs/*.pdf interfaces/web/public/test-documents/
+```
+
+---
+
+## Logs agents en temps réel
+
+### Dans le frontend
+
+L’**Agent Activity Log** s’affiche en temps réel pendant l’analyse via SSE :
+- Loader (cube PrismFlux + terminal) pendant le traitement
+- Logs streamés au fil de l’eau : Extractor → Validator → CarbonCalculator → Recommender
+
+### Endpoints API
+
+```bash
+# Stream SSE
 curl -N http://localhost:8000/api/v1/events/stream
-```
 
-### Option 3 : Historique des événements
-
-```bash
-# Récupérer les derniers logs
+# Historique
 curl http://localhost:8000/api/v1/events/history | python -m json.tool
 ```
 
-### Option 4 : Logs du backend (terminal 1)
-
-Le terminal backend affiche tous les logs structurés avec timestamps :
-
-```
-2024-06-15 10:30:12 | INFO | Extractor | Extraction réussie: Hamburg → Marseille
-2024-06-15 10:30:13 | INFO | Validator | 5 règles vérifiées, score: 95%
-2024-06-15 10:30:14 | INFO | CarbonCalculator | CO2: 1350.7 kgCO2e (route)
-2024-06-15 10:30:16 | INFO | Recommender | 3 recommandations générées
-```
-
----
-
-## 🔑 Vérifier que la clé API est utilisée
-
-### Test rapide
+### Test rapide API
 
 ```bash
-# Envoie un document de test au backend
 curl -s -X POST http://localhost:8000/api/v1/documents/process \
   -H "Content-Type: application/json" \
   -d '{
     "document_type": "invoice",
     "raw_content": {
-      "origin": "Paris",
-      "destination": "Berlin",
-      "total_weight_kg": 5000,
-      "distance_km": 1050,
-      "transport_mode": "road",
-      "shipper_name": "Test Corp",
-      "receiver_name": "Demo GmbH",
-      "departure_date": "2024-01-01",
-      "arrival_date": "2024-01-03",
-      "goods_description": "Test goods",
-      "currency": "EUR",
-      "total_cost": 1500
-    }
+      "raw_text": "Commercial Invoice. From: Hamburg. To: Saint-Priest. Weight: 10120 kg. Distance: 1180 km. Mode: Road. Carrier: EuroRoad."
+    },
+    "source_filename": "test.pdf"
   }' | python -m json.tool
 ```
 
-**Si la clé API fonctionne :** Les recommandations seront détaillées et contextuelles (générées par Gemini).
-
-**Si la clé API NE fonctionne PAS :** Les recommandations seront génériques (3 recommandations de fallback prédéfinies) et tu verras dans les logs backend : `WARNING | Using deterministic fallback`.
+> Pour les documents JSON structurés, utilise les clés attendues par l’extracteur (origin, destination, weight_kg, distance_km, transport_mode, etc.) ou `raw_text` pour du texte OCR brut.
 
 ---
 
-## 🏛️ Architecture
+## Architecture
 
 ```
 EcoChain/
-├── application/              # Couche Application
+├── application/
 │   ├── agents/               # Agents AGNO (Gemini 2.5 Flash)
-│   │   ├── extractor.py      # Agent 1: Extraction données
-│   │   ├── validator.py      # Agent 2: Validation règles métier
-│   │   ├── recommender.py    # Agent 3: Recommandations IA
-│   │   └── orchestrator.py   # Orchestrateur du pipeline
+│   │   ├── extractor.py      # Extraction entités (structured output)
+│   │   ├── validator.py      # Validation sémantique
+│   │   ├── recommender.py    # Recommandations personnalisées
+│   │   └── orchestrator.py  # Orchestration du pipeline
 │   ├── calculators/
-│   │   └── carbon_calculator.py  # Calcul CO2 (facteurs ADEME)
+│   │   └── carbon_calculator.py
 │   └── use_cases/
-│       └── process_document.py   # Use case principal
+│       └── process_document.py
 │
-├── domain/                   # Couche Domaine
-│   ├── models.py             # Modèles Pydantic v2
-│   └── constants.py          # Facteurs ADEME, benchmarks
+├── domain/
+│   ├── models.py
+│   └── constants.py          # Facteurs ADEME
 │
-├── infrastructure/           # Couche Infrastructure
-│   └── logging/
-│       └── event_logger.py   # Logger SSE temps réel
+├── infrastructure/
+│   ├── logging/
+│   │   └── event_logger.py   # Logger SSE
+│   └── llm/
+│       └── gemini_client.py  # (legacy, non utilisé par AGNO)
 │
-├── interfaces/               # Couche Interfaces
-│   ├── api/                  # Backend FastAPI
-│   │   ├── main.py           # App FastAPI + middleware
-│   │   ├── dependencies.py   # Injection de dépendances
-│   │   └── routers/          # Endpoints REST + SSE
-│   └── frontend/
-│       └── app.py            # Dashboard Streamlit
+├── interfaces/
+│   ├── api/                  # FastAPI
+│   │   ├── main.py
+│   │   ├── dependencies.py
+│   │   └── routers/
+│   │       ├── documents.py
+│   │       └── events.py     # SSE stream + history
+│   ├── frontend/             # Streamlit (alternatif)
+│   │   └── app.py
+│   └── web/                  # Next.js (frontend principal)
+│       ├── src/
+│       │   ├── app/          # Routes: /, /dashboard, /dashboard/documents, /dashboard/settings
+│       │   ├── components/
+│       │   └── lib/          # api.ts, pdf-extract.ts, documents-store
+│       └── public/
+│           └── test-documents/  # PDFs de test
 │
 ├── data/
-│   ├── mock/                 # 10 documents JSON de test
-│   └── pdfs/                 # 5 PDFs générés (reportlab)
+│   ├── mock/                 # Documents JSON
+│   └── pdfs/                 # PDFs générés par scripts
 │
-├── tests/                    # 36 tests (unit + intégration)
 ├── scripts/
-│   └── generate_pdfs.py      # Générateur de PDFs de test
-├── docs/
-│   └── architecture.drawio   # Diagramme d'architecture
-└── pyproject.toml            # Config project + dépendances
+│   └── generate_pdfs.py
+├── tests/
+└── pyproject.toml
 ```
 
 ### Pipeline Multi-Agent
 
 ```
-Document JSON/PDF
+Document (PDF → raw_text) ou JSON
        │
        ▼
   ┌─────────────┐    ┌─────────────┐    ┌──────────────┐    ┌──────────────┐
   │  Extractor   │ →  │  Validator   │ →  │   Carbon     │ →  │ Recommender  │
-  │  (AGNO +     │    │  (5 règles   │    │  Calculator  │    │  (AGNO +     │
-  │   Gemini)    │    │   + Gemini)  │    │  (ADEME)     │    │   Gemini)    │
+  │  (AGNO +     │    │  (AGNO +     │    │  Calculator  │    │  (AGNO +     │
+  │   Gemini)    │    │   Gemini)    │    │  (ADEME)     │    │   Gemini)    │
   └─────────────┘    └─────────────┘    └──────────────┘    └──────────────┘
                                                                     │
                                                                     ▼
-                                                          Rapport CO2 + Recommandations
+                                              CarbonReport + mode_comparisons + recommendations
 ```
+
+### Graphique "Comparaison modale"
+
+Le graphique **Émissions par mode** est dynamique et basé sur les données extraites du PDF :
+- Pour **ce trajet** (poids + distance du document), simulation des émissions si chaque mode avait été utilisé
+- Barre **dorée** = mode actuel du document
+- Barre **verte** = mode le moins émetteur
 
 ---
 
-## 📡 API Endpoints
+## API Endpoints
 
 | Méthode | Endpoint | Description |
 |---------|----------|-------------|
@@ -243,45 +230,41 @@ Document JSON/PDF
 | `GET` | `/api/v1/events/stream` | Stream SSE logs temps réel |
 | `GET` | `/api/v1/events/history` | Historique des événements |
 | `GET` | `/health` | Health check |
-| `GET` | `/docs` | Documentation Swagger |
+| `GET` | `/docs` | Swagger UI |
 
 ---
 
-## 🧪 Tests
+## Tests
 
 ```bash
-# Tous les tests (36)
+uv run pytest tests/ -v
+
+# Ou
 pytest tests/ -v
-
-# Tests unitaires seulement
-pytest tests/unit/ -v
-
-# Tests d'intégration
-pytest tests/integration/ -v
 ```
 
 ---
 
-## 🌱 Facteurs d'émission CO2 (ADEME)
+## Facteurs d'émission CO2 (ADEME)
 
 | Mode | Facteur (kgCO2e/t.km) | Exemple 10t × 1000km |
 |------|------------------------|----------------------|
-| � Maritime | 0.0160 | 160 kgCO2e |
-| � Rail | 0.0225 | 225 kgCO2e |
-| 🛥️ Fluvial | 0.0310 | 310 kgCO2e |
-| 🚛 Route | 0.0621 | 621 kgCO2e |
-| ✈️ Aérien | 1.0600 | 10,600 kgCO2e |
+| Maritime | 0.0160 | 160 kgCO2e |
+| Rail | 0.0225 | 225 kgCO2e |
+| Fluvial | 0.0310 | 310 kgCO2e |
+| Route | 0.0621 | 621 kgCO2e |
+| Aérien | 1.0600 | 10 600 kgCO2e |
 
 ---
 
-## ⚙️ Stack technique
+## Stack technique
 
 | Composant | Technologie |
 |-----------|-------------|
-| **Langage** | Python 3.12 (type hints stricts) |
-| **Framework IA** | AGNO (multi-agent async) |
-| **LLM** | Gemini 2.5 Flash (fallback: déterministe) |
-| **Backend** | FastAPI (async) + Pydantic v2 |
-| **Frontend** | Streamlit + Plotly |
-| **Tests** | pytest + pytest-asyncio (36 tests) |
+| **Backend** | Python 3.12, FastAPI, Pydantic v2 |
+| **IA** | AGNO (multi-agent async), google-genai |
+| **LLM** | Gemini 2.5 Flash |
+| **Frontend** | Next.js 16, TypeScript, Tailwind, shadcn/ui, Recharts, Framer Motion |
+| **PDF** | pdf.js (client), pypdf (serveur), reportlab (génération) |
+| **Tests** | pytest, pytest-asyncio |
 | **Qualité** | ruff, mypy (strict) |
