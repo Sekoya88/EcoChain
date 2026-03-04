@@ -1,16 +1,16 @@
-"""EcoChain AI — Streamlit Dashboard (Premium Redesign).
+"""EcoChain AI — Streamlit Dashboard (Kodama Grove Theme).
 
-Interface premium avec glassmorphism, animations CSS,
-logs agents SSE en temps réel, upload PDF, pipeline stepper animé.
+Interface premium thème forêt kodama (21st.dev) : verts profonds, mousse,
+glow organique, harmonie visuelle. Loader PrismFlux, upload PDF arbitraire.
 """
 
 from __future__ import annotations
 
+import io
 import json
 import os
-import time
 import threading
-import queue as thread_queue
+import time
 from pathlib import Path
 from typing import Any
 
@@ -22,37 +22,41 @@ BACKEND_URL = os.getenv("BACKEND_URL", "http://localhost:8000")
 MOCK_DATA_DIR = Path("data/mock")
 PDF_DATA_DIR = Path("data/pdfs")
 
-# ── Premium Color Palette ────────────────────────────────
+# ── Kodama Grove Theme (21st.dev) ──────────────────────
+# Deep forest, moss, organic glow, bark — esprit forêt
 C = {
-    "bg": "#0a0e17",
-    "bg2": "#0f1420",
-    "card": "rgba(15, 20, 35, 0.7)",
-    "card_solid": "#111827",
-    "glass": "rgba(255,255,255,0.03)",
-    "glass_border": "rgba(255,255,255,0.08)",
-    "border": "rgba(255,255,255,0.06)",
-    "accent": "#10b981",
-    "accent2": "#06d6a0",
-    "cyan": "#22d3ee",
-    "violet": "#8b5cf6",
-    "amber": "#f59e0b",
-    "rose": "#f43f5e",
-    "blue": "#3b82f6",
-    "text": "#f1f5f9",
-    "text2": "#cbd5e1",
-    "muted": "#64748b",
-    "dim": "#334155",
-    "green_glow": "rgba(16,185,129,0.15)",
-    "violet_glow": "rgba(139,92,246,0.15)",
-    "cyan_glow": "rgba(34,211,238,0.12)",
+    "bg": "#0a0f0a",
+    "bg2": "#0f1610",
+    "card": "rgba(15, 22, 16, 0.92)",
+    "card_solid": "#141c14",
+    "glass": "rgba(26, 44, 28, 0.5)",
+    "glass_border": "rgba(61, 92, 61, 0.2)",
+    "border": "rgba(61, 92, 61, 0.12)",
+    "accent": "#5a9c5a",
+    "accent2": "#7bc47b",
+    "sage": "#8fcf8f",
+    "moss": "#4a7c4a",
+    "terracotta": "#c9a227",
+    "amber": "#c9a227",
+    "rose": "#c75d5d",
+    "blue": "#6ba3b8",
+    "text": "#e2f0e2",
+    "text2": "#9fc69f",
+    "muted": "#6b8f6b",
+    "dim": "#3d5c3d",
+    "green_glow": "rgba(90, 156, 90, 0.22)",
+    "violet_glow": "rgba(127, 196, 123, 0.15)",
+    "cyan_glow": "rgba(107, 163, 184, 0.12)",
+    "violet": "#8fcf8f",
+    "cyan": "#6ba3b8",
 }
 
 AGENT_COLORS = {
-    "Orchestrator": C["amber"],
+    "Orchestrator": C["terracotta"],
     "Extractor": C["blue"],
     "Validator": C["amber"],
     "CarbonCalculator": C["accent"],
-    "Recommender": C["violet"],
+    "Recommender": C["sage"],
     "System": C["muted"],
 }
 
@@ -67,20 +71,23 @@ def get_premium_css() -> str:
     """Return the complete premium CSS stylesheet."""
     return f"""
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=JetBrains+Mono:wght@400;500&display=swap');
 
-        /* ── Global ─────────────────────────────────── */
+        /* ── Kodama Grove Global ─────────────────────── */
         .stApp {{
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'DM Sans', 'Inter', -apple-system, sans-serif;
             background: {C['bg']};
+            color: {C['text']};
         }}
 
         .stApp > header {{ background: transparent !important; }}
 
         .block-container {{
             padding-top: 2rem !important;
-            max-width: 1200px;
+            max-width: 1100px;
         }}
+
+        html {{ scroll-behavior: smooth; }}
 
         /* ── Keyframe Animations ─────────────────────── */
         @keyframes fadeInUp {{
@@ -671,7 +678,19 @@ def get_premium_css() -> str:
 
         .stButton > button:hover {{
             transform: translateY(-1px) !important;
-            box-shadow: 0 4px 12px rgba(16,185,129,0.3) !important;
+            box-shadow: 0 4px 16px rgba(90,156,90,0.25) !important;
+        }}
+
+        /* ── File Uploader (Kodama style) ────────────── */
+        [data-testid="stFileUploader"] {{
+            border: 1px dashed {C['glass_border']} !important;
+            border-radius: 12px !important;
+            padding: 1.25rem !important;
+            background: {C['glass']} !important;
+        }}
+        [data-testid="stFileUploader"]:hover {{
+            border-color: {C['accent']}40 !important;
+            background: {C['green_glow']} !important;
         }}
 
         .stButton > button[kind="primary"] {{
@@ -688,6 +707,53 @@ def get_premium_css() -> str:
             font-family: 'Inter', sans-serif !important;
             font-weight: 600 !important;
             color: {C['text2']} !important;
+        }}
+
+        /* ── PrismFlux-inspired Cube Loader ───────────── */
+        .prism-flux-container {{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            min-height: 220px;
+            padding: 2rem;
+        }}
+        .prism-flux-cube {{
+            width: 36px;
+            height: 36px;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: prismRotate 3s linear infinite;
+        }}
+        @keyframes prismRotate {{
+            0% {{ transform: rotateY(0deg) rotateX(0deg); }}
+            100% {{ transform: rotateY(360deg) rotateX(360deg); }}
+        }}
+        .prism-flux-face {{
+            position: absolute;
+            width: 36px;
+            height: 36px;
+            border: 1px solid {C['accent']};
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: {C['glass']};
+            backface-visibility: hidden;
+            border-radius: 4px;
+        }}
+        .prism-flux-face svg {{ width: 14px; height: 14px; color: {C['accent']}; }}
+        .prism-flux-face:nth-child(1) {{ transform: rotateY(0deg) translateZ(18px); }}
+        .prism-flux-face:nth-child(2) {{ transform: rotateY(180deg) translateZ(18px); }}
+        .prism-flux-face:nth-child(3) {{ transform: rotateY(90deg) translateZ(18px); }}
+        .prism-flux-face:nth-child(4) {{ transform: rotateY(-90deg) translateZ(18px); }}
+        .prism-flux-face:nth-child(5) {{ transform: rotateX(90deg) translateZ(18px); }}
+        .prism-flux-face:nth-child(6) {{ transform: rotateX(-90deg) translateZ(18px); }}
+        .prism-flux-status {{
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: {C['accent']};
+            letter-spacing: 0.05em;
         }}
     </style>
     """
@@ -736,6 +802,47 @@ def render_header() -> None:
         </div>
     </div>
     """, unsafe_allow_html=True)
+
+
+# ═══════════════════════════════════════════════════════
+#  PDF Extraction
+# ═══════════════════════════════════════════════════════
+
+def extract_text_from_pdf(pdf_bytes: bytes) -> str:
+    """Extract text from PDF bytes using pypdf. Returns raw text for LLM extraction."""
+    try:
+        from pypdf import PdfReader
+
+        reader = PdfReader(io.BytesIO(pdf_bytes))
+        parts = []
+        for page in reader.pages:
+            text = page.extract_text()
+            if text:
+                parts.append(text)
+        return "\n\n".join(parts) if parts else ""
+    except Exception as e:
+        raise ValueError(f"Failed to extract PDF text: {e}") from e
+
+
+def build_payload_from_pdf(pdf_bytes: bytes, filename: str) -> dict[str, Any]:
+    """Build API payload from PDF: extract text and structure for process endpoint."""
+    text = extract_text_from_pdf(pdf_bytes)
+    if not text.strip():
+        raise ValueError("PDF appears empty or unreadable (no text extracted)")
+    return {
+        "document_type": "invoice",
+        "raw_content": {"raw_text": text},
+        "source_filename": filename,
+    }
+
+
+def build_payload_from_json_sidecar(doc: dict[str, Any], pdf_name: str) -> dict[str, Any]:
+    """Build payload from pre-existing JSON sidecar (mock/sample docs)."""
+    return {
+        "document_type": doc.get("document_type", "invoice"),
+        "raw_content": doc.get("raw_content", {}),
+        "source_filename": pdf_name,
+    }
 
 
 # ═══════════════════════════════════════════════════════
@@ -893,6 +1000,32 @@ def render_pipeline_stepper(current_step: int = -1) -> None:
 
 
 # ═══════════════════════════════════════════════════════
+#  PrismFlux Loader
+# ═══════════════════════════════════════════════════════
+
+PRISM_FLUX_STATUSES = ["Fetching", "Extracting", "Validating", "Calculating", "Recommending", "Syncing"]
+
+
+def render_prism_flux_loader(status: str = "Processing") -> None:
+    """Render PrismFlux-inspired rotating cube loader with status text."""
+    plus_svg = (
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" '
+        'stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/>'
+        '<line x1="5" y1="12" x2="19" y2="12"/></svg>'
+    )
+    faces = "".join(f'<div class="prism-flux-face">{plus_svg}</div>' for _ in range(6))
+    st.markdown(
+        f"""
+        <div class="prism-flux-container">
+            <div class="prism-flux-cube">{faces}</div>
+            <div class="prism-flux-status">{status}...</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+# ═══════════════════════════════════════════════════════
 #  Metrics
 # ═══════════════════════════════════════════════════════
 
@@ -965,14 +1098,14 @@ def render_mode_chart(comparisons: list[dict[str, Any]]) -> None:
         marker_line_width=0,
         text=[f"{v:.0f}" for v in co2_values],
         textposition="outside",
-        textfont=dict(color=C["text2"], size=11, family="Inter"),
+        textfont=dict(color=C["text2"], size=11, family="DM Sans"),
         hovertemplate="<b>%{x}</b><br>%{y:.1f} kgCO2e<extra></extra>",
     )])
 
     fig.update_layout(
-        title=dict(text="Emissions by Transport Mode", font=dict(size=13, color=C["text2"], family="Inter"), x=0),
+        title=dict(text="Emissions by Transport Mode", font=dict(size=13, color=C["text2"], family="DM Sans"), x=0),
         plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)",
-        font=dict(family="Inter, sans-serif", color=C["muted"]),
+        font=dict(family="DM Sans, Inter, sans-serif", color=C["muted"]),
         xaxis=dict(gridcolor="rgba(255,255,255,0.03)", showgrid=False),
         yaxis=dict(gridcolor="rgba(255,255,255,0.04)", title="kgCO2e", title_font=dict(size=10)),
         height=340, margin=dict(t=45, b=40, l=50, r=20),
@@ -993,18 +1126,18 @@ def render_gauge(total_co2: float, benchmark: float = 150.0) -> None:
         mode="gauge+number+delta",
         value=total_co2,
         delta={"reference": benchmark, "relative": False, "position": "bottom",
-               "font": {"size": 12, "family": "Inter"}, "increasing": {"color": C["rose"]}, "decreasing": {"color": C["accent"]}},
-        number={"suffix": " kg", "font": {"size": 28, "color": C["text"], "family": "Inter"}},
-        title={"text": "CO2 vs Sector Benchmark", "font": {"size": 12, "color": C["muted"], "family": "Inter"}},
+               "font": {"size": 12, "family": "DM Sans"}, "increasing": {"color": C["rose"]}, "decreasing": {"color": C["accent"]}},
+        number={"suffix": " kg", "font": {"size": 28, "color": C["text"], "family": "DM Sans"}},
+        title={"text": "CO2 vs Sector Benchmark", "font": {"size": 12, "color": C["muted"], "family": "DM Sans"}},
         gauge={
             "axis": {"range": [0, max_range], "tickwidth": 1, "tickcolor": C["dim"], "tickfont": {"size": 9, "color": C["muted"]}},
             "bar": {"color": bar_color, "thickness": 0.65},
             "bgcolor": C["card_solid"],
             "borderwidth": 1, "bordercolor": C["dim"],
             "steps": [
-                {"range": [0, benchmark * 0.75], "color": "rgba(16,185,129,0.07)"},
-                {"range": [benchmark * 0.75, benchmark], "color": "rgba(245,158,11,0.07)"},
-                {"range": [benchmark, max_range], "color": "rgba(244,63,94,0.07)"},
+                {"range": [0, benchmark * 0.75], "color": "rgba(90,156,90,0.12)"},
+                {"range": [benchmark * 0.75, benchmark], "color": "rgba(201,162,39,0.1)"},
+                {"range": [benchmark, max_range], "color": "rgba(199,93,93,0.1)"},
             ],
             "threshold": {"line": {"color": C["rose"], "width": 2.5}, "thickness": 0.75, "value": benchmark},
         },
@@ -1012,7 +1145,7 @@ def render_gauge(total_co2: float, benchmark: float = 150.0) -> None:
 
     fig.update_layout(
         height=300, paper_bgcolor="rgba(0,0,0,0)",
-        font=dict(family="Inter, sans-serif", color=C["muted"]),
+        font=dict(family="DM Sans, Inter, sans-serif", color=C["muted"]),
         margin=dict(t=35, b=25, l=30, r=30),
     )
 
@@ -1028,8 +1161,8 @@ def render_recommendations(recommendations: list[dict[str, Any]]) -> None:
     if not recommendations:
         return
 
-    st.markdown("""<div class="section-title">
-        <span class="section-icon" style="background:rgba(16,185,129,0.15);color:#10b981;">→</span>
+    st.markdown(f"""<div class="section-title">
+        <span class="section-icon" style="background:{C['green_glow']};color:{C['accent']};">→</span>
         Recommendations
     </div>""", unsafe_allow_html=True)
 
@@ -1206,7 +1339,7 @@ def render_batch_report(result: dict[str, Any]) -> None:
             marker_line_width=0,
             text=[f"{v:.0f}" for v in co2_values],
             textposition="outside",
-            textfont=dict(color=C["text2"], size=11, family="Inter"),
+            textfont=dict(color=C["text2"], size=11, family="DM Sans"),
         )])
         fig.update_layout(
             title=dict(text="CO2 Emissions per Document", font=dict(size=13, color=C["text2"], family="Inter"), x=0),
@@ -1289,10 +1422,11 @@ def main() -> None:
             Analysis: {doc.get("_filename", "document")}
         </div>""", unsafe_allow_html=True)
 
-        # Show pipeline stepper as "processing"
-        stepper_placeholder = st.empty()
-        with stepper_placeholder:
+        # Show pipeline stepper + loader
+        loader_placeholder = st.empty()
+        with loader_placeholder.container():
             render_pipeline_stepper(current_step=0)
+            render_prism_flux_loader(status="Processing")
 
         payload = {
             "document_type": doc.get("document_type", "invoice"),
@@ -1300,20 +1434,17 @@ def main() -> None:
             "source_filename": doc.get("_filename", "document.json"),
         }
 
-        with st.spinner(""):
-            try:
-                # Update stepper through processing
-                with stepper_placeholder:
-                    render_pipeline_stepper(current_step=1)
-                r = httpx.post(f"{BACKEND_URL}/api/v1/documents/process", json=payload, timeout=120)
-                result = r.json()
-            except Exception as e:
-                st.error(f"API Error: {e}")
-                result = None
+        try:
+            with loader_placeholder.container():
+                render_pipeline_stepper(current_step=1)
+                render_prism_flux_loader(status="Extracting")
+            r = httpx.post(f"{BACKEND_URL}/api/v1/documents/process", json=payload, timeout=120)
+            result = r.json()
+        except Exception as e:
+            st.error(f"API Error: {e}")
+            result = None
 
-        # Show complete stepper
-        with stepper_placeholder:
-            render_pipeline_stepper(current_step=4)
+        loader_placeholder.empty()
 
         if result and result.get("success"):
             render_single_report(result)
@@ -1340,14 +1471,19 @@ def main() -> None:
             ]
         }
 
-        with st.spinner(""):
-            try:
-                r = httpx.post(f"{BACKEND_URL}/api/v1/documents/batch", json=payload, timeout=300)
-                result = r.json()
-            except Exception as e:
-                st.error(f"API Error: {e}")
-                result = None
+        loader_placeholder = st.empty()
+        with loader_placeholder.container():
+            render_pipeline_stepper(current_step=1)
+            render_prism_flux_loader(status="Batch processing")
 
+        try:
+            r = httpx.post(f"{BACKEND_URL}/api/v1/documents/batch", json=payload, timeout=300)
+            result = r.json()
+        except Exception as e:
+            st.error(f"API Error: {e}")
+            result = None
+
+        loader_placeholder.empty()
         if result and result.get("success"):
             render_batch_report(result)
         elif result:
@@ -1358,56 +1494,54 @@ def main() -> None:
     elif action == "pdf_upload" and "uploaded_pdf" in st.session_state:
         uploaded = st.session_state["uploaded_pdf"]
         pdf_name = st.session_state.get("uploaded_pdf_name", "uploaded.pdf")
+        pdf_bytes = uploaded.getvalue()
 
         st.markdown(f"""<div class="section-title">
             <span class="section-icon" style="background:{C['cyan_glow']};color:{C['cyan']};">▲</span>
             PDF Analysis: {pdf_name}
         </div>""", unsafe_allow_html=True)
 
-        # Read PDF content as text (simple extraction)
-        pdf_bytes = uploaded.getvalue()
+        # Build payload: prefer JSON sidecar if exists, else extract text from PDF
+        payload = None
+        json_path = PDF_DATA_DIR / pdf_name.replace(".pdf", ".json")
 
-        # For the MVP, send the PDF bytes as base64 through a special endpoint
-        # or parse JSON sidecar. For now, we'll try to find a matching JSON sidecar.
-        import base64
-        pdf_b64 = base64.b64encode(pdf_bytes).decode()
+        try:
+            if json_path.exists():
+                with open(json_path, "r", encoding="utf-8") as f:
+                    doc = json.load(f)
+                payload = build_payload_from_json_sidecar(doc, pdf_name)
+            else:
+                payload = build_payload_from_pdf(pdf_bytes, pdf_name)
+        except ValueError as e:
+            st.error(str(e))
+            st.session_state["action"] = None
+            st.stop()
 
-        # Try to find matching JSON sidecar
-        json_name = pdf_name.replace(".pdf", ".json")
-        json_path = PDF_DATA_DIR / json_name
-        if json_path.exists():
-            with open(json_path, "r", encoding="utf-8") as f:
-                doc = json.load(f)
+        # Show loader + stepper, then run API call
+        loader_placeholder = st.empty()
+        with loader_placeholder.container():
+            render_pipeline_stepper(current_step=0)
+            render_prism_flux_loader(status="Extracting")
 
-            payload = {
-                "document_type": doc.get("document_type", "invoice"),
-                "raw_content": doc.get("raw_content", {}),
-                "source_filename": pdf_name,
-            }
+        try:
+            with loader_placeholder.container():
+                render_pipeline_stepper(current_step=1)
+                render_prism_flux_loader(status="Validating")
+            r = httpx.post(f"{BACKEND_URL}/api/v1/documents/process", json=payload, timeout=120)
+            result = r.json()
+        except httpx.TimeoutException:
+            st.error("Request timed out. The document may be complex—try again.")
+            result = None
+        except Exception as e:
+            st.error(f"API Error: {e}")
+            result = None
 
-            stepper_placeholder = st.empty()
-            with stepper_placeholder:
-                render_pipeline_stepper(current_step=0)
+        loader_placeholder.empty()
 
-            with st.spinner(""):
-                try:
-                    with stepper_placeholder:
-                        render_pipeline_stepper(current_step=1)
-                    r = httpx.post(f"{BACKEND_URL}/api/v1/documents/process", json=payload, timeout=120)
-                    result = r.json()
-                except Exception as e:
-                    st.error(f"API Error: {e}")
-                    result = None
-
-            with stepper_placeholder:
-                render_pipeline_stepper(current_step=4)
-
-            if result and result.get("success"):
-                render_single_report(result)
-            elif result:
-                st.error(f"Error: {result.get('error', {}).get('message', 'Unknown error')}")
-        else:
-            st.warning(f"No JSON sidecar found for {pdf_name}. Upload a PDF from the generated test set in data/pdfs/.")
+        if result and result.get("success"):
+            render_single_report(result)
+        elif result:
+            st.error(f"Error: {result.get('error', {}).get('message', 'Unknown error')}")
 
         st.session_state["action"] = None
 
